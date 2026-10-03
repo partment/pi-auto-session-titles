@@ -89,9 +89,10 @@ A failed title request never produces a fallback title. The deterministic fallba
 - The extension stops a title-model request after 60 seconds.
 - The configured title model receives relevant paths. These paths can reveal project structure, but they do not contain file contents.
 - The extension does not change an automatic title after creation. Compaction does not start automatic naming again.
-- The extension keeps titles short and in sentence case. It does not use title case for all words.
+- Titles are written in Traditional Chinese (Taiwan) with Taiwan terminology. The prompt forbids Mainland Chinese terms and Simplified characters. Code identifiers, file names, commands, and English proper nouns keep their original form and casing.
+- The language rule lives in the prompt only. Code does not check the title language.
 - The title prompt states the character budget before generation. Titles are capped at 72 characters.
-- An invalid title (over length, over word count, incomplete ending, or ungrounded) triggers one regeneration. The retry prompt names the rejected title and the reason.
+- An invalid title (over length, over word count, or incomplete ending) triggers one regeneration. The retry prompt names the rejected title and the reason.
 - If regeneration still fails, the deterministic fallback applies: the opening message's first words, capped in length. Code never truncates a model title as the primary enforcement.
 - A failed title request (provider error, timeout, missing model, authentication) never produces a fallback title; the existing title is kept.
 - The configuration for the title model uses `autoSessionTitles.provider`, `autoSessionTitles.model`, and `autoSessionTitles.thinkingLevel` in `~/.pi/agent/settings.json`.

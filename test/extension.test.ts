@@ -576,7 +576,7 @@ describe("title rule enforcement", () => {
 		await harness.invokeCommand("rename-session");
 
 		expect(harness.providerPrompts).toHaveLength(2);
-		expect(harness.providerPrompts[0] ?? "").toContain("at most 72 characters");
+		expect(harness.providerPrompts[0] ?? "").toContain("最多 72 個字元");
 		const retryPrompt = harness.providerPrompts[1] ?? "";
 		expect(retryPrompt).toContain(overlong);
 		expect(retryPrompt).toContain(`${overlong.length} characters, limit is 72`);
@@ -611,6 +611,19 @@ describe("title rule enforcement", () => {
 		expect(retryPrompt).toContain("5000 characters, limit is 72");
 		expect(retryPrompt.length).toBeLessThan((harness.providerPrompts[0] ?? "").length + 400);
 		expect(harness.setNames).toEqual(["Improve agentsmd skill from Dex Horthy's improve-claude-md"]);
+	});
+
+	test("asks for Taiwan Traditional Chinese and keeps a title not worded like the evidence", async () => {
+		const harness = createHarness({
+			branch: [{ type: "message", message: { role: "user", content: "修改標題提示詞，改用繁體中文" } }],
+			title: "調整工作階段標題語言",
+		});
+
+		await harness.invokeCommand("rename-session");
+
+		expect(harness.providerPrompts).toHaveLength(1);
+		expect(harness.providerPrompts[0] ?? "").toContain("繁體中文（台灣）");
+		expect(harness.setNames).toEqual(["調整工作階段標題語言"]);
 	});
 
 	test("keeps the deterministic fallback for unusable first attempts", async () => {
